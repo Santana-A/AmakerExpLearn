@@ -1,0 +1,55 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.account {
+    width: 800px; 
+    height: 480px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 1px 10px 1px black;
+}
+
+.upperContainer {
+    height: 100px;
+    background: rgb(20,33,61, 0.8);
+}
+.imgContainer {
+    position: absolute;
+    background: white;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    padding: 5px;
+    transform: translate(345px, 45px);
+}
+
+img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    padding: 5px;
+    transform: translate(-7px, -6px); 
+    border:2px solid rgb(20,33,61);
+}
+
+.lowerContainer {
+    margin-top: 80px;
+    height: 300px;
+    background: white;
+    text-align: center;
+    justify-content: center;
+}
+
+h3 {
+   margin: 1rem;
+}
+
+.btn {
+    margin-top: 20px;
+    font-size: large;
+}
