@@ -15,21 +15,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// const db = mysql.createConnection ({
-//     user: "root",
-//     host: "localhost",
-// 	password: "Onepiece#99",
-//     database: "springseniorproject",
-// });
-
-    const db = mysql.createConnection ({
-        user: "b20653ea8ea6ff",
-        host: "us-cdbr-east-05.cleardb.net",
-    	password: "34dd9b7b",
-        database: "heroku_1690849c8f9142a",
-    });
-
-mysql://b20653ea8ea6ff:34dd9b7b@us-cdbr-east-05.cleardb.net/heroku_1690849c8f9142a?reconnect=true
 
 
 //insert student registration form info into database
