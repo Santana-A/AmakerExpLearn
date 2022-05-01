@@ -11,7 +11,7 @@ const Login = () => {
       <div className="wrapper">
         <div className="left">
           <div className="loginButton google" onClick={signInWithGoogleStudent}>
-            Student Login
+            Student 
           </div>
         </div>
         <div className="center">
@@ -20,7 +20,7 @@ const Login = () => {
         </div>
         <div className="right">
           <div className="loginButton facebook" onClick={signInWithGoogleRep}>
-            Department Login
+            Representative
           </div>
         </div>
       </div>

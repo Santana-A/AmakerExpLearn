@@ -15,6 +15,7 @@ import Paper from '@mui/material/Paper';
 import Popup from '../Popup';
 import { storage } from '../../firebase-config';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { HashLink } from 'react-router-hash-link';
 
 const Activity = ({activity: {
   ActivityID, 
@@ -33,40 +34,11 @@ const [progress, setProgress] = useState(0);
 const [url, setUrl] = useState("");
 
 const deleteActivity = (id) => {
-  Axios.delete(`http://localhost:3001/deleteActivity/${id}`).then((response) => {
+  Axios.delete(`https://exp-learn-log.herokuapp.com/deleteActivity/${id}`).then((response) => {
     alert("activity deleted");
   });
 };
 
-const formHandler = (e) => {
-  e.preventDefault();
-  const file = e.target[0].files[0];
-  uploadFiles(file);
-};
-
-const uploadFiles = (file) => {
-  //
-  if (!file) return;
-  const sotrageRef = ref(storage, `${ActivityID}/${file.name}`);
-  const uploadTask = uploadBytesResumable(sotrageRef, file);
-
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {
-      const prog = Math.round(
-        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      );
-      setProgress(prog);
-    },
-    (error) => console.log(error),
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        console.log("File available at", downloadURL);
-        setUrl(downloadURL);
-      });
-    }
-  );
-};
 
   return (
     // <div className='activityWrap'> 
@@ -101,8 +73,8 @@ const uploadFiles = (file) => {
             <Button onClick={() => { deleteActivity(ActivityID)}}>Delete</Button>
             </TableCell>
             <TableCell align="center">
-              <Button onClick={() => setButtonPopup (true)}>Upload</Button>
-                  <Popup trigger={buttonPopup} setTrigger={setButtonPopup} >
+              <HashLink className='activityLink' to={'/activityItem/' + ActivityID +'#upload'}><Button>Upload</Button></HashLink>
+                  {/* <Popup trigger={buttonPopup} setTrigger={setButtonPopup} >
                      <div className='fileUpload'
                      style={{
                       display: 'flex',
@@ -113,10 +85,10 @@ const uploadFiles = (file) => {
                          <input type="file" className='input' />
                          <button type='submit' >Upload</button>
                        </form>
-                       {/* <h3>Uploaded {progress} %</h3> */}
+                       <h3>Uploaded {progress} %</h3>
                        {url !="" ? (<img src={url} />): (<></>)}
                      </div>
-                  </Popup>
+                  </Popup> */}
           </TableCell>
           </TableRow>
           </TableBody>

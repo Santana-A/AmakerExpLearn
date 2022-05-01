@@ -36,7 +36,7 @@ export const Log = () => {
     // };
 
     useEffect(() => {
-        Axios.post("http://localhost:3001/studentUserInfo", {
+        Axios.post("https://exp-learn-log.herokuapp.com/studentUserInfo", {
             email: email,  
         }).then((response) => {
           setStudentId(response.data[0].StudentID);
@@ -51,13 +51,13 @@ export const Log = () => {
     
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/types").then((response) => {
+        Axios.get("https://exp-learn-log.herokuapp.com/types").then((response) => {
         setTypeList(response.data);
         });
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/classes").then((response) => {
+        Axios.get("https://exp-learn-log.herokuapp.com/classes").then((response) => {
         setClassList(response.data);
         });
     }, [])
@@ -66,7 +66,7 @@ export const Log = () => {
 
     //Add input data in database 
     const addActivity = () => {
-        Axios.post("http://localhost:3001/addActivity", {
+        Axios.post("https://exp-learn-log.herokuapp.com/addActivity", {
             activityname: activityname, 
             description: description,
             country: country,
@@ -108,7 +108,7 @@ export const Log = () => {
 
 
                 <label>Description:</label>
-                {/* <input type="textarea" onChange={(event) => {setDes(event.target.value)}} /> */}
+
                 <textarea  onChange={(event) => {setDes(event.target.value)}} />
 
                 

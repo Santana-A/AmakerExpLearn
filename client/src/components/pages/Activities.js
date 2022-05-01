@@ -26,7 +26,7 @@ const Activities = () => {
   // };
 
   useEffect(() => {
-    Axios.post("http://localhost:3001/studentUserInfo", {
+    Axios.post("https://exp-learn-log.herokuapp.com/studentUserInfo", {
         email: email,  
     }).then((response) => {
       setId(response.data[0].StudentID);
@@ -36,7 +36,7 @@ const Activities = () => {
 
 
   // useEffect(() => {
-      Axios.post("http://localhost:3001/activities", {
+      Axios.post("https://exp-learn-log.herokuapp.com/activities", {
         id: id,  
       }).then((response) => {
       setActivities(response.data);

@@ -17,7 +17,7 @@ const RepActivities = () => {
   const email = localStorage.getItem('email');
   const [activityID, setActivityID] = useState("");
 
-    Axios.get("http://localhost:3001/repactivities").then((response) => {
+    Axios.get("https://exp-learn-log.herokuapp.com/repactivities").then((response) => {
       setActivities(response.data);
     });
 

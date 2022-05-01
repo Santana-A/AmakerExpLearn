@@ -22,7 +22,7 @@ const Profile = () => {
 
 
     const addStudent = () => {
-        Axios.post("http://localhost:3001/registerStudent", {
+        Axios.post("https://exp-learn-log.herokuapp.com/registerStudent", {
             fname: fname, 
             lname: lname,
             username: username,
@@ -36,7 +36,7 @@ const Profile = () => {
     };
 
     const addRep = () => {
-      Axios.post("http://localhost:3001/registerRep", {
+      Axios.post("https://exp-learn-log.herokuapp.com/registerRep", {
           fname: fname, 
           lname: lname,
           id: id,
@@ -49,7 +49,7 @@ const Profile = () => {
   };
 
     const goHome = () => {
-       navigate('/');
+        window.location.reload(false);
     };
 
     const showAlert = () => {

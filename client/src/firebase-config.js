@@ -4,7 +4,9 @@ import { getAuth,
   onAuthStateChanged,
   signOut,
   GoogleAuthProvider,
-  signInWithPopup } from "firebase/auth";
+  signInWithPopup,
+  getAdditionalUserInfo } from "firebase/auth";
+  
 import { useState, useEffect } from "react";
 import { getStorage } from "firebase/storage";
 
@@ -61,6 +63,7 @@ export const signInWithGoogleRep = () => {
   .then((result) => {
       const email = result.user.email;
       const domain = email.split('@')[1];
+      console.log("this is rep user" + email);
       localStorage.setItem("email", email);
     if(!(domain === 'gmail.com')){
       signOut(auth);
@@ -123,3 +126,7 @@ export function validStuAccount(userEmail){
   // userEmail.split('@')[1] === 'olemiss.edu' || 
   // userEmail.split('@')[1] === 'cs.olemiss.edu';
 }
+
+// export function userExists(){
+//   return getAdditionalUserInfo(auth).isNewUser();
+// }

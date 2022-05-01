@@ -6,16 +6,27 @@ import Moment from 'moment';
 import { Button } from '../Button';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, listAll, getMetadata } from "firebase/storage";
+import { storage } from '../../firebase-config';
 
 const ActivityItem = () => {
     const {activityID} = useParams();
     const id = parseInt(activityID);
     const [activity, setActivity] = useState([]);
     const [statusId, setStatusId] = useState("");
+    const [fileUrls, setFileUrls] = useState([]);
     let navigate = useNavigate();
+    const filesListRef = ref(storage, `${id}/doc/`);
 
-    Axios.post("http://localhost:3001/repactivity", {
+
+    Axios.post("https://exp-learn-log.herokuapp.com/repactivity", {
         id: id,  
       }).then((response) => {
       setActivity(response.data);
@@ -23,37 +34,47 @@ const ActivityItem = () => {
 
   const [statusList, setStatusList] = useState([]);
   
-  Axios.get("http://localhost:3001/limitedStatus").then((response) => {
+  Axios.get("https://exp-learn-log.herokuapp.com/limitedStatus").then((response) => {
       setStatusList(response.data);
   });
 
   const approve = (id, status) => {
-    Axios.put("http://localhost:3001/approve", {id:id, status:status}).then((response)=>{
+    Axios.put("https://exp-learn-log.herokuapp.com/approve", {id:id, status:status}).then((response)=>{
       alert('Approval Updated');
       navigate('/repactivities');
     });
   };
 
   const reject = (id) => {
-    Axios.put("http://localhost:3001/reject", {id:id}).then((response)=>{
+    Axios.put("https://exp-learn-log.herokuapp.com/reject", {id:id}).then((response)=>{
       alert("Activity Rejected");
       navigate('/repactivities'); 
     });
   };
 
   const updateStatus = (id, status) => {
-    Axios.put("http://localhost:3001/updateStatus", {id:id, status:status}).then((response)=>{
+    Axios.put("https://exp-learn-log.herokuapp.com/updateStatus", {id:id, status:status}).then((response)=>{
       alert("Approval Reversed");
       navigate('/repactivities');
     });
   };
 
   const reverseReject = (id) => {
-    Axios.put("http://localhost:3001/reverseReject", {id:id, status: statusId}).then((response)=>{
+    Axios.put("https://exp-learn-log.herokuapp.com/reverseReject", {id:id, status: statusId}).then((response)=>{
       alert("Rejection Reversed");
       navigate('/repactivities');
     });
   };
+
+  useEffect(() => {
+    listAll(filesListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((downloadURL) => {
+          setFileUrls((prev) => [...prev, downloadURL]);
+        });
+      });
+    });
+  }, []);
 
 
   return (
@@ -66,6 +87,27 @@ const ActivityItem = () => {
               <h3>Location: {val.Country}, {val.State}, {val.City}</h3>
               <h3>Sponsor: {val.Sponsor}</h3>
               <h3>Duration: {Moment(new Date(val.StartDate)).format("MM/DD/YYYY")} - {Moment(new Date(val.EndDate)).format("MM/DD/YYYY")}</h3>
+              <div className='files'>
+                <TableContainer component={Paper} style={{width:"80vw", marginLeft:"10vw", marginRight:"10vw", marginTop:"5vh"}}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="center">Documentation</TableCell>
+                        <TableCell />
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {fileUrls.map((url) => (
+                      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+                      <TableCell align="center">
+                        <a href={url} target="_blank">Document</a>  
+                      </TableCell>
+                    </TableRow>
+                    ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+            </div>
               {val.Status === ("Initially Pending") && val.Status !== "Rejected"
                       ? [<Button onClick ={()=> {approve(val.ActivityID, val.ApprovalID)}}> Approve</Button>,
                         <Button onClick ={()=> {reject(val.ActivityID)}}> Reject</Button>]
@@ -74,7 +116,6 @@ const ActivityItem = () => {
                       {val.Status === ("Pending") && val.Status !== "Rejected"
                       ? [<Button onClick ={()=> {approve(val.ActivityID, val.ApprovalID)}}> Approve</Button>,
                         <Button onClick ={()=> {reject(val.ActivityID)}}> Reject</Button>,
-                        <Button>View Documentation</Button>
                       ]
 
                       : (<></>)

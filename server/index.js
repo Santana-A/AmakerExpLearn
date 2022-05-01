@@ -2,23 +2,34 @@ const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
 
-const saltRounds = 10
+const saltRounds = 10;
+const PORT = 3001;
 
 const app = express();
 
-app.use(cors({
-    origin: ["http://localhost:3000"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-}));
+// app.use(cors({
+//     origin: ["https://exp-learn-log.herokuapp.com"],
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true
+// }));
+app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection ({
-    user: "root",
-    host: "localhost",
-	password: "Onepiece#99",
-    database: "springseniorproject",
-});
+// const db = mysql.createConnection ({
+//     user: "root",
+//     host: "localhost",
+// 	password: "Onepiece#99",
+//     database: "springseniorproject",
+// });
+
+    const db = mysql.createConnection ({
+        user: "b20653ea8ea6ff",
+        host: "us-cdbr-east-05.cleardb.net",
+    	password: "34dd9b7b",
+        database: "heroku_1690849c8f9142a",
+    });
+
+mysql://b20653ea8ea6ff:34dd9b7b@us-cdbr-east-05.cleardb.net/heroku_1690849c8f9142a?reconnect=true
 
 
 //insert student registration form info into database
@@ -306,6 +317,42 @@ app.put('/updateStatus', (req, res) => {
     });
 });
 
+app.put('/updateRep', (req, res) => {
+    const fname = req.body.updateFname;
+    const lname = req.body.updateLname;
+    const username = req.body.updateUsername;
+    const id = req.body.id;
+    const email = req.body.email;
+    const updateid = req.body.updateid; 
+
+    db.query("Update departmentRep set RepID = ?, RepFName= ?, RepLName=?, RepUsername=? where RepID=?", 
+    [updateid, fname, lname, username, id], (err, result) => {
+        if(err){
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+})
+
+app.put('/updateStudent', (req, res) => {
+    const fname = req.body.fname;
+    const lname = req.body.lname;
+    const username = req.body.username;
+    const id = req.body.id;
+    const updateid = req.body.updateid; 
+    const gradDate = req.body.gradDate;
+
+    db.query("Update student set StudentID = ?, StudentFName= ?, StudentLName=?, StudentUsername=?, GradDate=? where StudentID=?", 
+    [updateid, fname, lname, username, gradDate, id], (err, result) => {
+        if(err){
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+})
+
 //reverse reject status
 app.put('/reverseReject', (req, res) => {
     const id = req.body.id;
@@ -344,6 +391,6 @@ app.delete("/deleteActivity/:id", (req, res) => {
   });
 
 
-app.listen(3001, () => {
-    console.log("Server is running on port 3001")
+app.listen(process.env.PORT || PORT, () => {
+    console.log(`Server is running on port ${PORT}`)
 });

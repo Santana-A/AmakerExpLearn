@@ -28,7 +28,7 @@
     transform: translate(345px, 45px);
 }
 
-img {
+.profileUserImg {
     width: 100px;
     height: 100px;
     border-radius: 50%;
